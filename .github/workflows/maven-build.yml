@@ -28,7 +28,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y awscli
 
-   - name: Copy file to S3 bucket
+    - name: Copy file to S3 bucket
       run: |
         aws s3 cp target/config-server-0.0.1-SNAPSHOT.jar s3://yletter-artifacts/config-server.jar
       env:
