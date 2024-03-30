@@ -41,12 +41,12 @@ public class ConfigServerApplication extends SpringBootServletInitializer implem
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(CloudConfigServerApplication.class);
+        return application.sources(ConfigServerApplication.class);
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
-        CloudConfigServerApplication.applicationContext = applicationContext;
+        ConfigServerApplication.applicationContext = applicationContext;
     }
 
     public static ApplicationContext getApplicationContext() {
