@@ -31,12 +31,12 @@ import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder
 
 @SpringBootApplication
 @EnableConfigServer
-public class CloudConfigServerApplication extends SpringBootServletInitializer implements ApplicationContextAware {
+public class ConfigServerApplication extends SpringBootServletInitializer implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
     public static void main(String[] args) {
-        SpringApplication.run(CloudConfigServerApplication.class, args);
+        SpringApplication.run(ConfigServerApplication.class, args);
     }
 
     @Override
