@@ -1,5 +1,5 @@
 package com.yuvaraj.configserver;
-
+/*
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.config.server.EnableConfigServer;
@@ -12,10 +12,9 @@ public class ConfigServerApplication {
 		SpringApplication.run(ConfigServerApplication.class, args);
 	}
 
-}
+}*/
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cloud.config.server.EnableConfigServer;
@@ -56,17 +55,14 @@ public class CloudConfigServerApplication extends SpringBootServletInitializer i
 
     @Bean
     @Primary
-    @ConditionalOnProperty(prefix = "oid.crossAccountRole", name = "enabled", havingValue = "true")
+    
     public AWSCredentialsProvider oidCredentialsProvider() {
-        // Sts client uses credentials from normal instance role
-
-
-	        AWSSecurityTokenService stsClient = AWSSecurityTokenServiceClientBuilder
+        AWSSecurityTokenService stsClient = AWSSecurityTokenServiceClientBuilder
                 .standard()
                 .withRegion(Regions.fromName("us-east-1"))
                 .build();
         return new STSAssumeRoleSessionCredentialsProvider
-                .Builder("arn:aws:iam::044014527626:role/cross-account-role", "yuvaraj-session")
+                .Builder("arn:aws:iam::307306538014:role/ec2-s3-cc-role", "yuvaraj-session")
                 .withStsClient(stsClient)
                 .build();
     }
