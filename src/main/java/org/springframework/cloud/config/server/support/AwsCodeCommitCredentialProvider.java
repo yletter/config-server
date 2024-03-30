@@ -165,8 +165,8 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
                 this.awsCredentialProvider = new AWSStaticCredentialsProvider(
                         new BasicAWSCredentials(this.username, this.password));
             }
-            else if (CloudConfigServerApplication.getApplicationContext().containsBean("oidCredentialsProvider")) {
-                logger.debug("Using OID credentials provider");
+            else if (CloudConfigServerApplication.getApplicationContext().containsBean("yuvarajCredentialsProvider")) {
+                logger.debug("Using Yuvaraj credentials provider");
                 awsCredentialProvider = CloudConfigServerApplication.getApplicationContext().getBean("oidCredentialsProvider", AWSCredentialsProvider.class);
             }
             else {

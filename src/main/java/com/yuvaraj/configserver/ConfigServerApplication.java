@@ -55,8 +55,7 @@ public class ConfigServerApplication extends SpringBootServletInitializer implem
 
     @Bean
     @Primary
-    
-    public AWSCredentialsProvider oidCredentialsProvider() {
+    public AWSCredentialsProvider yuvarajCredentialsProvider() {
         AWSSecurityTokenService stsClient = AWSSecurityTokenServiceClientBuilder
                 .standard()
                 .withRegion(Regions.fromName("us-east-1"))
