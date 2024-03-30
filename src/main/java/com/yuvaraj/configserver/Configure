@@ -1,0 +1,65 @@
+package com.yuvaraj.configserver.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+import static org.springframework.security.web.util.matcher.RegexRequestMatcher.regexMatcher;
+
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig {
+    @Value("${security.user.username:user}")
+    String username;
+
+    @Value("${security.user.password:userpassword}")
+    String password;
+
+    @Value("${management.endpoints.web.base-path:/info}")
+    String managementEndpointBasePath;
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(antMatcher(HttpMethod.POST, "/encrypt"))
+                .requestMatchers(antMatcher(managementEndpointBasePath+"/**/*"))
+                .requestMatchers(regexMatcher("/"));
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http.authorizeHttpRequests( (authz) -> authz
+                .requestMatchers(regexMatcher(HttpMethod.GET, ".*"))
+                .hasRole("USER")
+                .anyRequest().authenticated())
+                .httpBasic(withDefaults());
+
+        return http.build();
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser(username)
+                .password(password)
+                .roles("USER");
+    }
+}
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
+
