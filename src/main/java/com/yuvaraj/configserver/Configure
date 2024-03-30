@@ -1,4 +1,4 @@
-package com.yuvaraj.configserver.config;
+package com.yuvaraj.configserver;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ public class WebSecurityConfig {
     @Value("${security.user.password:userpassword}")
     String password;
 
-    @Value("${management.endpoints.web.base-path:/info}")
+    @Value("${management.endpoints.web.base-path:/manage}")
     String managementEndpointBasePath;
 
     @Bean
@@ -57,9 +57,3 @@ public class WebSecurityConfig {
                 .roles("USER");
     }
 }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
-
