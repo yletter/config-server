@@ -40,6 +40,7 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
     private String password;
 
     protected static String calculateCodeCommitPassword(URIish uri, String awsSecretKey) {
+        System.out.println("\n\n !!!! YUVARAJ8 !!!! \n\n\n");
         String[] split = uri.getHost().split("\\.");
         if (split.length < 4) {
             throw new CredentialException("Cannot detect AWS region from URI", null);
@@ -73,6 +74,7 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
     }
 
     private static byte[] hmacSha256(String data, byte[] key) throws Exception {
+        System.out.println("\n\n !!!! YUVARAJ7 !!!! \n\n\n");
         String algorithm = HMAC_SHA256;
         Mac mac = Mac.getInstance(algorithm);
         mac.init(new SecretKeySpec(key, algorithm));
@@ -81,6 +83,7 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
 
     private static byte[] sign(String secret, String shortDateStamp, String region,
                                String toSign) throws Exception {
+                                System.out.println("\n\n !!!! YUVARAJ6 !!!! \n\n\n");
         byte[] kSecret = ("AWS4" + secret).getBytes(UTF8);
         byte[] kDate = hmacSha256(shortDateStamp, kSecret);
         byte[] kRegion = hmacSha256(region, kDate);
@@ -91,6 +94,7 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
 
     private static byte[] canonicalRequestDigest(URIish uri)
             throws NoSuchAlgorithmException {
+                System.out.println("\n\n !!!! YUVARAJ5 !!!! \n\n\n");
         StringBuilder canonicalRequest = new StringBuilder();
         canonicalRequest.append("GIT\n") 
                 .append(uri.getPath()).append("\n")
@@ -114,6 +118,7 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
     }
 
     public static boolean canHandle(String uri) {
+        System.out.println("\n\n !!!! YUVARAJ1 !!!! \n\n\n");
         if (!hasText(uri)) {
             return false;
         }
@@ -143,6 +148,7 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
 
     @Override
     public boolean supports(CredentialItem... items) {
+        System.out.println("\n\n !!!! YUVARAJ4 !!!! \n\n\n");
         for (CredentialItem i : items) {
             if (i instanceof CredentialItem.Username) {
                 continue;
@@ -158,6 +164,7 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
     }
 
     private AWSCredentials retrieveAwsCredentials() {
+        System.out.println("\n\n !!!! YUVARAJ2 !!!! \n\n\n");
         if (this.awsCredentialProvider == null) {
             if (this.username != null && this.password != null) {
                 this.logger.debug("Creating a static AWSCredentialsProvider");
@@ -179,6 +186,7 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
     @Override
     public boolean get(URIish uri, CredentialItem... items)
             throws UnsupportedCredentialItem {
+                System.out.println("\n\n !!!! YUVARAJ3 !!!! \n\n\n");
         String codeCommitPassword;
         String awsAccessKey;
         String awsSecretKey;
