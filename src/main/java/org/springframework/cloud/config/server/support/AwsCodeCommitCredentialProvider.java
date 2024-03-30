@@ -1,9 +1,8 @@
-
 package org.springframework.cloud.config.server.support;
 
 import com.amazonaws.auth.*;
 import com.amazonaws.util.ValidationUtils;
-import com.optum.oid.CloudConfigServerApplication;
+import com.yuvaraj.configsever.ConfigServerApplication;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
@@ -165,9 +164,9 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
                 this.awsCredentialProvider = new AWSStaticCredentialsProvider(
                         new BasicAWSCredentials(this.username, this.password));
             }
-            else if (CloudConfigServerApplication.getApplicationContext().containsBean("yuvarajCredentialsProvider")) {
+            else if (ConfigServerApplication.getApplicationContext().containsBean("yuvarajCredentialsProvider")) {
                 logger.debug("Using Yuvaraj credentials provider");
-                awsCredentialProvider = CloudConfigServerApplication.getApplicationContext().getBean("oidCredentialsProvider", AWSCredentialsProvider.class);
+                awsCredentialProvider = ConfigServerApplication.getApplicationContext().getBean("oidCredentialsProvider", AWSCredentialsProvider.class);
             }
             else {
                 this.logger.debug("Creating a default AWSCredentialsProvider");
