@@ -2,7 +2,7 @@ package org.springframework.cloud.config.server.support;
 
 import com.amazonaws.auth.*;
 import com.amazonaws.util.ValidationUtils;
-import com.yuvaraj.configsever.ConfigServerApplication;
+import com.yuvaraj.configserver.ConfigServerApplication;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
