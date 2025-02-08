@@ -1,9 +1,12 @@
-name: Maven Build
+name: Build
 
 on:
   push:
     branches:
-      - main  # Change this to your main branch name if different
+      - main  # Adjust to the branch you want to trigger the build on
+  pull_request:
+    branches:
+      - main  # Adjust to the branch you want to trigger the build on
 
 jobs:
   build:
@@ -21,17 +24,78 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn -B clean install
+      run: mvn -B clean package
 
-    - name: Install AWS CLI
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y awscli
 
-    - name: Copy file to S3 bucket
+    - name: Create Git Tag
       run: |
-        aws s3 cp target/config-server-0.0.1-SNAPSHOT.jar s3://yletter-artifacts/config-server.jar
+        git config --global user.name "yuvarajengineer"
+        git config --global user.email  yuvarajengineer@gmail.com
+        git tag -a v${{ github.run_number }} -m "Release version ${{ github.run_number }}"
+        git push origin v${{ github.run_number }}
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
+        body: |
+          Automated release created by GitHub Actions.
+        draft: false
+        prerelease: false
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-east-1  # Replace with your AWS region
+        GITHUB_TOKEN: ${{ secrets.YGITHUB_TOKEN }}
+
+    - name: Upload JAR artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: config-server
+        path: target/*.jar  # Assumes Maven output is in the target directory
+
+    - name: Upload JAR artifact
+      if: always()
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: target/config-server-0.0.1-SNAPSHOT.jar  # Path to your JAR file
+        asset_name: config-server.jar
+        asset_content_type: application/java-archive
+      env:
+        GITHUB_TOKEN: ${{ secrets.YGITHUB_TOKEN }}
+      
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v2
+      with:
+        images: yuvarajengineer/config-server
+      
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+
+#
+#    - name: Install AWS CLI
+#      run: |
+#        sudo apt-get update
+#        sudo apt-get install -y awscli
+#
+#    - name: Copy file to S3 bucket
+#      run: |
+#        aws s3 cp target/config-server-0.0.1-SNAPSHOT.jar s3://yletter-artifacts/config-server.jar
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        AWS_DEFAULT_REGION: us-east-1  # Replace with your AWS region
