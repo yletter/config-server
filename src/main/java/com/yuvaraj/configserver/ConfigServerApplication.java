@@ -1,5 +1,6 @@
+
 package com.yuvaraj.configserver;
-/*
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.config.server.EnableConfigServer;
@@ -12,7 +13,8 @@ public class ConfigServerApplication {
 		SpringApplication.run(ConfigServerApplication.class, args);
 	}
 
-}*/
+}
+/*
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -73,3 +75,4 @@ public class ConfigServerApplication extends SpringBootServletInitializer implem
     }
 
 }
+*/

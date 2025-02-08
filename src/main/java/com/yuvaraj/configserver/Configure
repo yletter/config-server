@@ -39,13 +39,11 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http.authorizeHttpRequests( (authz) -> authz
                 .requestMatchers(regexMatcher(HttpMethod.GET, ".*"))
                 .hasRole("USER")
                 .anyRequest().authenticated())
                 .httpBasic(withDefaults());
-
         return http.build();
     }
 

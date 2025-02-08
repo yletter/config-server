@@ -1,5 +1,5 @@
 package org.springframework.cloud.config.server.support;
-
+/*
 import com.amazonaws.auth.*;
 import com.amazonaws.util.ValidationUtils;
 import com.yuvaraj.configserver.ConfigServerApplication;
@@ -285,3 +285,4 @@ public class AwsCodeCommitCredentialProvider extends CredentialsProvider {
     }
 
 }
+*/
